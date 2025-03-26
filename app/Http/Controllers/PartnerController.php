@@ -24,7 +24,7 @@ class PartnerController extends Controller
             'company_name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:20',
             'partner_logo' => 'nullable|string',
-            'representative_id' => 'required|exists:partner_representatives,id',
+            'representative_id' => 'required|exists:representatives,id',
         ]);
 
         $partner = Partner::create($validated);
@@ -58,7 +58,7 @@ class PartnerController extends Controller
             'company_name' => 'sometimes|required|string|max:255',
             'phone_number' => 'sometimes|required|string|max:20',
             'partner_logo' => 'sometimes|nullable|string',
-            'representative_id' => 'sometimes|required|exists:partner_representatives,id',
+            'representative_id' => 'sometimes|required|exists:representatives,id',
         ]);
 
         $partner->update($validated);
