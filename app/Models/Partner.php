@@ -17,5 +17,9 @@ class Partner extends Model
         return $this->hasMany(Partnership::class);
     }
 
+    public function representatives(){
+        return $this->hasMany(Representative::class);
+    }
+
 
 }

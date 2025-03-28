@@ -12,7 +12,9 @@ class Representative extends Model
         'email',
         'phone',
         'position_at_company'
-    ];    public function partner(){
+    ];    
+    
+    public function partner(){
         return $this->belongsTo(Partner::class);
     }
 }

@@ -10,10 +10,6 @@ class Partnership extends Model
         return $this->hasMany(Document::class);
     }
 
-    public function partner_representitive(){
-        return $this->hasOne(Partner_representative::class);
-    }
-
     public function partner(){
         return $this->belongsTo(Partner::class);
     }
