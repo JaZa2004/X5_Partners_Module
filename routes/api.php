@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\PartnershipController;
@@ -12,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+Route::post('/login' , [LoginController::class, 'login']);
+Route::middleware('api')->post('login' , [LoginController::class, 'login']);
+
 
 Route::resource('documents', DocumentController::class);
 Route::resource('representatives', RepresentativeController::class);
