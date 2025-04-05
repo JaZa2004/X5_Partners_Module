@@ -11,7 +11,8 @@ class Representative extends Model
         'name',
         'email',
         'phone',
-        'position_at_company'
+        'position_at_company',
+        'partner_id'  // assuming a foreign key exists in the partner table to representatives table
     ];    
     
     public function partner(){

@@ -5,10 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\Partner;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use Illuminate\Support\Facades\Auth;
 
 class PartnerController extends Controller
 {
+    // Function to check admin role
+    private function checkAdminRole()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'admin') {
+            return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
+        }
+        return null; // Return null if the user has the correct role
+    }
+
     public function index()
     {
         $partners = Partner::all();
@@ -20,11 +30,17 @@ class PartnerController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if the user is an admin
+        $adminCheck = $this->checkAdminRole();
+        if ($adminCheck) {
+            return $adminCheck;
+        }
+
         $validated = $request->validate([
             'company_name' => 'required|string|max:255',
             'phone_number' => 'required|string|max:20',
             'partner_logo' => 'nullable|string',
-            'representative_id' => 'required|exists:representatives,id',
+            'partner_type' => 'nullable|string'
         ]);
 
         $partner = Partner::create($validated);
@@ -49,6 +65,12 @@ class PartnerController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        // Check if the user is an admin
+        $adminCheck = $this->checkAdminRole();
+        if ($adminCheck) {
+            return $adminCheck;
+        }
+
         $partner = Partner::find($id);
         if (!$partner) {
             return response()->json(['error' => 'Partner not found'], Response::HTTP_NOT_FOUND);
@@ -58,7 +80,8 @@ class PartnerController extends Controller
             'company_name' => 'sometimes|required|string|max:255',
             'phone_number' => 'sometimes|required|string|max:20',
             'partner_logo' => 'sometimes|nullable|string',
-            'representative_id' => 'sometimes|required|exists:representatives,id',
+            'partner_type' => 'sometimes|nullable|string'
+
         ]);
 
         $partner->update($validated);
@@ -71,6 +94,12 @@ class PartnerController extends Controller
      */
     public function destroy(string $id)
     {
+        // Check if the user is an admin
+        $adminCheck = $this->checkAdminRole();
+        if ($adminCheck) {
+            return $adminCheck;
+        }
+
         $partner = Partner::find($id);
         if (!$partner) {
             return response()->json(['error' => 'Partner not found'], Response::HTTP_NOT_FOUND);
@@ -78,5 +107,29 @@ class PartnerController extends Controller
 
         $partner->delete();
         return response()->json(['message' => 'Partner deleted successfully'], Response::HTTP_NO_CONTENT);
+    }
+
+    public function representatives(int $id){
+        $partner = Partner::find($id);
+        if (!$partner) {
+            return response()->json(['error' => 'Partner not found'], Response::HTTP_NOT_FOUND);
+        }
+        return response()->json($partner->representatives, Response::HTTP_OK);
+    }
+
+    public function addresses(int $id){
+        $partner = Partner::find($id);
+        if (!$partner) {
+            return response()->json(['error' => 'Partner not found'], Response::HTTP_NOT_FOUND);
+        }
+        return response()->json($partner->addresses, Response::HTTP_OK);
+    }
+
+    public function partnerships(int $id){
+        $partner = Partner::find($id);
+        if (!$partner) {
+            return response()->json(['error' => 'Partner not found'], Response::HTTP_NOT_FOUND);
+        }
+        return response()->json($partner->partnerships, Response::HTTP_OK);
     }
 }

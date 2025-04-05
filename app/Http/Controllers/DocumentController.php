@@ -4,9 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Models\Document;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentController extends Controller
 {
+    // Function to check admin role
+    private function checkAdminRole()
+    {
+        $user = Auth::user();
+        if ($user->role !== 'admin') {
+            return response()->json(['message' => 'Forbidden'], Response::HTTP_FORBIDDEN);
+        }
+        return null; // Return null if the user has the correct role
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -29,6 +41,12 @@ class DocumentController extends Controller
      */
     public function store(Request $request)
     {
+        // Check if the user is an admin
+        $adminCheck = $this->checkAdminRole();
+        if ($adminCheck) {
+            return $adminCheck;
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -63,6 +81,12 @@ class DocumentController extends Controller
      */
     public function update(Request $request, Document $document)
     {
+        // Check if the user is an admin
+        $adminCheck = $this->checkAdminRole();
+        if ($adminCheck) {
+            return $adminCheck;
+        }
+
         $validated = $request->validate([
             'title' => 'sometimes|string|max:255',
             'description' => 'sometimes|string',
@@ -81,6 +105,12 @@ class DocumentController extends Controller
      */
     public function destroy(Document $document)
     {
+        // Check if the user is an admin
+        $adminCheck = $this->checkAdminRole();
+        if ($adminCheck) {
+            return $adminCheck;
+        }
+
         $document->delete();
         return response()->json(['message' => 'Document deleted successfully']);
     }

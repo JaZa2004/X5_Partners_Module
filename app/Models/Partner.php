@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Partner extends Model
 {
     protected $fillable = [
-        'company_name', 'representative_id', 'phone_number','company_logo'
+        'company_name', 'partner_type', 'phone_number','company_logo'
     ];
     public function addresses(){
         return $this->hasMany(Address::class);
