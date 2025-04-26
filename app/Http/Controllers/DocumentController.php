@@ -28,17 +28,6 @@ class DocumentController extends Controller
         return response()->json($documents);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        // Usually for views - Not needed for API-based apps
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         // Check if the user is an admin
@@ -66,14 +55,6 @@ class DocumentController extends Controller
     public function show(Document $document)
     {
         return response()->json($document);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Document $document)
-    {
-        // Usually for views - Not needed for API-based apps
     }
 
     /**

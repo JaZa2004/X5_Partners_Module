@@ -14,28 +14,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Public routes
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
 
 // Protected routes (require auth:sanctum middleware)
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('/logout', [AuthController::class, 'logout']); // Changed to POST for RESTfulness
+    Route::post('logout', [AuthController::class, 'logout']); // Changed to POST for RESTfulness
 
-    Route::get('/user', function (Request $request) {
+    Route::get('user', function (Request $request) {
         return $request->user();
     });
 
     Route::get('/test-gate', [AuthController::class, 'testGate']);
 
-    Route::resource('documents', DocumentController::class);
-    Route::resource('representatives', RepresentativeController::class);
-    Route::resource('users', UserController::class);
-    Route::resource('partnerships', PartnershipController::class);
-    Route::resource('partners', PartnerController::class);
-    Route::resource('addresses', AddressController::class);
-    Route::resource('agreementterms', AgreementtermController::class);
-    Route::resource('services', ServiceController::class);
+    Route::resource('documents', DocumentController::class)->except(['create', 'edit']);
+    Route::resource('representatives', RepresentativeController::class)->except(['create', 'edit']);
+    Route::resource('users', UserController::class)->except(['create', 'edit']);
+    Route::resource('partnerships', PartnershipController::class)->except(['create', 'edit']);
+    Route::resource('partners', PartnerController::class)->except(['create', 'edit']);
+    Route::resource('addresses', AddressController::class)->except(['create', 'edit']);
+    Route::resource('agreementterms', AgreementtermController::class)->except(['create', 'edit']);
+    Route::resource('services', ServiceController::class)->except(['create', 'edit']);
+
     Route::get('partners/{id}/representatives',[PartnerController::class ,'representatives']);
     Route::get('partners/{id}/addresses',[PartnerController::class ,'addresses']);
     Route::get('partners/{id}/partnerships',[PartnerController::class ,'partnerships']);

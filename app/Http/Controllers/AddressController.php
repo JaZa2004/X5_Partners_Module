@@ -75,7 +75,6 @@ class AddressController extends Controller
         }
 
         $validated = $request->validate([
-            'partner_id' => 'sometimes|required|exists:partners,id',
             'country' => 'sometimes|required|string|max:100',
             'city' => 'sometimes|required|string|max:100',
             'street' => 'sometimes|required|string|max:255',
